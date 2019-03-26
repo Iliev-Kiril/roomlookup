@@ -29,6 +29,7 @@
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>blackboard</artifactId>
 			<version>2.2.0</version>
+			<packaging>jar</packaging>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
