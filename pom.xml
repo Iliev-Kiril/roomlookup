@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>blackboard</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>2.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
