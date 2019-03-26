@@ -9,6 +9,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
+import com.vaadin.server.ClassResource;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
@@ -36,8 +37,8 @@ public class MyVaadinUI extends UI implements ViewDisplay{
 
 	private Panel springViewDisplay;
 	
-	Image loginLogo;
-	String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+	Image loginLogo = new Image();
+	//String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 	
 	@Autowired
 	EventSystem eventSystem;
@@ -59,10 +60,10 @@ public class MyVaadinUI extends UI implements ViewDisplay{
 		root.setSpacing(true);
 		setContent(root);
 		
-		loginLogo = new Image("", new FileResource(new File(basepath +  "/WEB-INF/images/roomlookup_b.png")));
+		loginLogo.setSource(new ClassResource(String.format("/images/roomlookup_b.png", 1)));
 		loginLogo.setWidth(20, Unit.PERCENTAGE);
 		root.addComponent(loginLogo);
-
+		
 		final CssLayout navigationBar = new CssLayout();
 		navigationBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 	
