@@ -3,13 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>de.schaeftlein.dev.vaadin</groupId>
+	<groupId>openshift</groupId>
 	<artifactId>demo-spring-vaadin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>demo</name>
-	<description>Demo project for Spring Boot with Vaadin</description>
+	<name>Roomlookup</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -30,6 +29,8 @@
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>blackboard</artifactId>
 			<version>2.2.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/blackboard-2.2.0.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
