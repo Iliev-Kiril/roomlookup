@@ -16,14 +16,6 @@
 		<version>1.4.7.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	
-	<build>
-		<resources>
-	        <resource>
-	            <directory>src/main/webapp/WEB-INF</directory>
-	        </resource>
-	    </resources>
-	</build>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -102,6 +94,11 @@
 						</configuration>
 					</plugin>
 				</plugins>
+				<resources>
+			        <resource>
+			            <directory>src/main/webapp/WEB-INF</directory>
+			        </resource>
+			    </resources>
 			</build>
 		</profile>
 	</profiles>
