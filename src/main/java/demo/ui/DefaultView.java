@@ -18,7 +18,7 @@ public class DefaultView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        addComponent(new Label("The search function is not implemented yet. Please search manually in the list of employees."));
+        addComponent(new Label("The search function is not complete yet. It works only if you search for the exact <first name> or <last name> with capital first letter or the <room number>."));
     }
 
     @Override

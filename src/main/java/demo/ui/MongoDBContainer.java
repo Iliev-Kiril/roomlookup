@@ -18,8 +18,8 @@ public class MongoDBContainer extends ListDataProvider<Customer> {
 
 	public static final String BEAN_ID = "id";
 
-    public static final String[] PROPERTIES = {BEAN_ID, "firstName", "lastName", "room"};
-    public static final String[] HEADERS = {"ID", "First Name", "Last Name", "Room"};
+    public static final String[] PROPERTIES = {BEAN_ID, "firstName", "lastName", "roomNumber"};
+    public static final String[] HEADERS = {"ID", "First Name", "Last Name", "Room Number"};
 
     public MongoDBContainer() {
     	this(new ArrayList<Customer>());

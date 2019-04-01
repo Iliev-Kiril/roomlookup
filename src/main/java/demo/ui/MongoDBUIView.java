@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.AbstractLayout;
@@ -19,8 +20,10 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import org.springframework.util.StringUtils;
 
 import demo.data.Customer;
 import demo.data.CustomerRepository;
@@ -37,6 +40,10 @@ public class MongoDBUIView extends VerticalLayout implements View,ReloadEntriesE
 	private Grid<Customer> grid;
 	private String selectedId;
 	private Customer selectedCustomer;
+	private TextField filterBySearchText;
+//	private TextField filterByFirstName;
+//	private TextField filterByLastName;
+//	private TextField filterByRoomNumber;
 	
 	private Button deleteButton;
 	private Button editButton;
@@ -67,6 +74,11 @@ public class MongoDBUIView extends VerticalLayout implements View,ReloadEntriesE
 	private void initLayout(){
 		setMargin(true);
 		setSpacing(true);
+		
+        // search bar
+        final AbstractLayout searchBar = initSearchBar(service);
+        searchBar.setWidth("100%");
+        
 		// vaadin table 
         grid = new Grid<Customer>(Customer.class);
         grid.setDataProvider(mongodbContainer);
@@ -88,6 +100,7 @@ public class MongoDBUIView extends VerticalLayout implements View,ReloadEntriesE
             LOG.info("Selected item id {"+ selectedId+"}");
         
         });
+        
         // button bar
         final AbstractLayout buttonBar = initButtonBar();
         buttonBar.setWidth("100%");
@@ -95,6 +108,7 @@ public class MongoDBUIView extends VerticalLayout implements View,ReloadEntriesE
         // edit Form
         editForm.setVisible(false);
         
+        addComponent(searchBar);
         addComponent(grid);
         addComponent(buttonBar);
         addComponent(editForm);
@@ -135,6 +149,59 @@ public class MongoDBUIView extends VerticalLayout implements View,ReloadEntriesE
 
         return buttonBar;
     }
+	
+	private AbstractLayout initSearchBar(CustomerRepository service) {
+        final HorizontalLayout searchBar = new HorizontalLayout();
+
+        searchBar.setSpacing(true);
+        
+        this.service = service;
+//        this.filterByFirstName = new TextField();
+//        this.filterByLastName = new TextField();
+//        this.filterByRoomNumber = new TextField();
+//        filterByFirstName.setPlaceholder("Filter by first name");
+//        filterByLastName.setPlaceholder("Filter by last name");
+//        filterByRoomNumber.setPlaceholder("Filter by room nr");
+        this.filterBySearchText = new TextField();
+        filterBySearchText.setPlaceholder("Filter by FN/LS/RN");
+        
+		// Replace listing with filtered content when user changes filter
+//        filterByFirstName.setValueChangeMode(ValueChangeMode.EAGER);
+//        filterByFirstName.addValueChangeListener(e -> listCustomers(e.getValue()));
+//        
+//        filterByLastName.setValueChangeMode(ValueChangeMode.EAGER);
+//        filterByLastName.addValueChangeListener(e -> listCustomers(e.getValue()));
+//        
+//        filterByRoomNumber.setValueChangeMode(ValueChangeMode.EAGER);
+//        filterByRoomNumber.addValueChangeListener(e -> listCustomers(e.getValue()));
+        
+        filterBySearchText.setValueChangeMode(ValueChangeMode.EAGER);
+        filterBySearchText.addValueChangeListener(e -> listCustomers(e.getValue()));
+
+//        searchBar.addComponents(filterByFirstName, filterByLastName, filterByRoomNumber);
+        searchBar.addComponent(filterBySearchText);
+
+//        searchBar.setComponentAlignment(filterByFirstName, Alignment.MIDDLE_LEFT);
+//        searchBar.setComponentAlignment(filterByLastName, Alignment.MIDDLE_CENTER);
+//        searchBar.setComponentAlignment(filterByRoomNumber, Alignment.MIDDLE_RIGHT);
+        searchBar.setComponentAlignment(filterBySearchText, Alignment.MIDDLE_CENTER);
+
+        return searchBar;
+    }
+	
+	// tag::listCustomers[]
+	void listCustomers(String filterText) {
+		if (StringUtils.isEmpty(filterText)) {
+			grid.setItems(service.findAll());
+		}
+		else {
+//			grid.setItems(service.findByFirstNameLike(filterText));
+//			grid.setItems(service.findByLastNameLike(filterText));
+//			grid.setItems(service.findByRoomNumberLike(filterText));
+			grid.setItems(service.findByFirstNameOrLastNameOrRoomNumberLike(filterText));
+		}
+	}
+	// end::listCustomers[]
     
     private void editSelectedEntry() {
         if (selectedId != null) {

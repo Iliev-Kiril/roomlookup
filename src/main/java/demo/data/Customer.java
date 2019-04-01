@@ -9,21 +9,21 @@ public class Customer {
 
 	private String firstName;
 	private String lastName;
-	private String room;
+	private String roomNumber;
 
 	public Customer() {
 	}
 
-	public Customer(String firstName, String lastName, String room) {
+	public Customer(String firstName, String lastName, String roomNumber) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.room = room;
+		this.roomNumber = roomNumber;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Customer[id=%s, firstName='%s', lastName='%s', room='%s']",
-				id, firstName, lastName, room);
+		return String.format("Customer[id=%s, firstName='%s', lastName='%s', roomNumber='%s']",
+				id, firstName, lastName, roomNumber);
 	}
 
 	public String getFirstName() {
@@ -42,12 +42,12 @@ public class Customer {
 		this.lastName = lastName;
 	}
 	
-	public String getRoom() {
-		return room;
+	public String getRoomNumber() {
+		return roomNumber;
 	}
 
-	public void setRoom(String room) {
-		this.room = room;
+	public void setRoomNumber(String roomNumber) {
+		this.roomNumber = roomNumber;
 	}
 
 	public String getId() {

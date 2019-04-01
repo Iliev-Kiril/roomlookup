@@ -32,7 +32,7 @@ public class CustomerForm extends FormLayout {
     private String id = null;
     private TextField firstName = new TextField("First Name:");
     private TextField lastName = new TextField("Last Name:");
-    private TextField room = new TextField("Room:");
+    private TextField roomNumber = new TextField("Room Number:");
 
     public CustomerForm() {
         initForm();
@@ -42,13 +42,13 @@ public class CustomerForm extends FormLayout {
     	id = customer.getId();
     	firstName.setValue(customer.getFirstName());
     	lastName.setValue(customer.getLastName());
-    	room.setValue(customer.getRoom());
+    	roomNumber.setValue(customer.getRoomNumber());
     }
 
     private void initForm() {
         addComponent(firstName);
         addComponent(lastName);
-        addComponent(room);
+        addComponent(roomNumber);
 
         final Button commit = new Button("Commit");
         final Button cancel = new Button("Cancel");
@@ -78,23 +78,23 @@ public class CustomerForm extends FormLayout {
 
     private void commitForm() {
         if(id!=null){
-        	log.info("Update user with id {}, name {} and room {}", id, firstName.getValue(), lastName.getValue(), room.getValue());
+        	log.info("Update user with id {}, name {} and room {}", id, firstName.getValue(), lastName.getValue(), roomNumber.getValue());
         	Customer mitarbeiter = customerService.findOne(id);
         	mitarbeiter.setFirstName(firstName.getValue());
         	mitarbeiter.setLastName(lastName.getValue());
-        	mitarbeiter.setRoom(room.getValue());
+        	mitarbeiter.setRoomNumber(roomNumber.getValue());
         	customerService.save(mitarbeiter);
         }
         else {        	
-        	log.info("Creating user with name {} and room {}", firstName.getValue(), lastName.getValue(), room.getValue());
-        	customerService.save(new Customer(firstName.getValue(), lastName.getValue(),  room.getValue()));
+        	log.info("Creating user with name {} and room {}", firstName.getValue(), lastName.getValue(), roomNumber.getValue());
+        	customerService.save(new Customer(firstName.getValue(), lastName.getValue(),  roomNumber.getValue()));
         }
     }
 
     private void clearAndHide() {
         firstName.setValue("");
         lastName.setValue("");
-        room.setValue("");
+        roomNumber.setValue("");
         id = null;
         setVisible(false);
     }
