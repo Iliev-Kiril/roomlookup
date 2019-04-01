@@ -35,7 +35,7 @@ public class MyVaadinUI extends UI implements ViewDisplay{
 	private Panel springViewDisplay;
 	
 	Image loginLogo;
-	String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+	//String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 	
 	@Autowired
 	EventSystem eventSystem;
@@ -57,8 +57,8 @@ public class MyVaadinUI extends UI implements ViewDisplay{
 		root.setSpacing(true);
 		setContent(root);
 		
-		//loginLogo.setSource(new ClassResource(String.format("/images/roomlookup_b.png", 1)));
-		loginLogo = new Image("", new FileResource(new File(basepath +  "/WEB-INF/images/roomlookup_b.png")));
+		loginLogo.setSource(new ClassResource(String.format("/images/roomlookup_b.png", 1)));
+		//loginLogo = new Image("", new FileResource(new File(basepath +  "/WEB-INF/images/roomlookup_b.png")));
 		loginLogo.setWidth(20, Unit.PERCENTAGE);
 		root.addComponent(loginLogo);
 
