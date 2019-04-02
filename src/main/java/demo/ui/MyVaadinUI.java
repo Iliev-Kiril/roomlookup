@@ -14,6 +14,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -34,7 +35,7 @@ public class MyVaadinUI extends UI implements ViewDisplay{
 
 	private Panel springViewDisplay;
 	
-	//Image loginLogo;
+	Image loginLogo;
 	//String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 	
 	@Autowired
@@ -57,16 +58,15 @@ public class MyVaadinUI extends UI implements ViewDisplay{
 		root.setSpacing(true);
 		setContent(root);
 		
-		//loginLogo.setSource(new ClassResource(String.format("/images/roomlookup_b.png", 1)));
+		loginLogo.setSource(new ClassResource(String.format("/images/roomlookup_b.png", 1)));
 		//loginLogo = new Image("", new FileResource(new File(basepath +  "/WEB-INF/images/roomlookup_b.png")));
-		//loginLogo.setWidth(20, Unit.PERCENTAGE);
-		//root.addComponent(loginLogo);
+		loginLogo.setWidth(30, Unit.PERCENTAGE);
+		root.addComponent(loginLogo);
+		root.setComponentAlignment(loginLogo, Alignment.MIDDLE_CENTER);
 
 		final CssLayout navigationBar = new CssLayout();
 		navigationBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-	
-		navigationBar.addComponent(createNavigationButton("Notifications",
-                DefaultView.VIEW_NAME));		
+		
         navigationBar.addComponent(createNavigationButton("Employees",
                 MongoDBUIView.VIEW_NAME));
         

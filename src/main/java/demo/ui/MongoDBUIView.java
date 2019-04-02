@@ -18,6 +18,7 @@ import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -34,16 +35,16 @@ import demo.ui.event.ReloadEntriesEvent;
 @UIScope
 public class MongoDBUIView extends VerticalLayout implements View,ReloadEntriesEvent.ReloadEntriesListener{
 	private static final long serialVersionUID = -785973470246010003L;
-	public static final String VIEW_NAME = "RoomlookupUI";
+	public static final String VIEW_NAME = "Employees";
 	private static final Log LOG = LogFactory.getLog(MongoDBUIView.class);
 	
 	private Grid<Customer> grid;
 	private String selectedId;
 	private Customer selectedCustomer;
-	private TextField filterBySearchText;
-//	private TextField filterByFirstName;
-//	private TextField filterByLastName;
-//	private TextField filterByRoomNumber;
+	//private TextField filterBySearchText;
+	private TextField filterByFirstName;
+	private TextField filterByLastName;
+	private TextField filterByRoomNumber;
 	
 	private Button deleteButton;
 	private Button editButton;
@@ -79,12 +80,15 @@ public class MongoDBUIView extends VerticalLayout implements View,ReloadEntriesE
         final AbstractLayout searchBar = initSearchBar(service);
         searchBar.setWidth("100%");
         
-		// vaadin table 
+        // vaadin table 
         grid = new Grid<Customer>(Customer.class);
         grid.setDataProvider(mongodbContainer);
         
         // set columns
         grid.setColumnOrder(mongodbContainer.PROPERTIES);
+        
+        Column<Customer, ?> column = grid.getColumn("id");
+        column.setHidden(true);
         
         grid.setSelectionMode(SelectionMode.SINGLE);
         
@@ -93,12 +97,13 @@ public class MongoDBUIView extends VerticalLayout implements View,ReloadEntriesE
 
         // table select listener
         grid.addSelectionListener(event -> {
-        
-        	selectedCustomer = event.getFirstSelectedItem().get();
-            selectedId = selectedCustomer.getId();
-  
-            LOG.info("Selected item id {"+ selectedId+"}");
-        
+        	
+    	  if(event.getFirstSelectedItem().isPresent()){
+				selectedCustomer = event.getFirstSelectedItem().get();
+				selectedId = selectedCustomer.getId();
+				  
+				LOG.info("Selected item id {"+ selectedId+"}");
+    		  }       
         });
         
         // button bar
@@ -156,52 +161,74 @@ public class MongoDBUIView extends VerticalLayout implements View,ReloadEntriesE
         searchBar.setSpacing(true);
         
         this.service = service;
-//        this.filterByFirstName = new TextField();
-//        this.filterByLastName = new TextField();
-//        this.filterByRoomNumber = new TextField();
-//        filterByFirstName.setPlaceholder("Filter by first name");
-//        filterByLastName.setPlaceholder("Filter by last name");
-//        filterByRoomNumber.setPlaceholder("Filter by room nr");
-        this.filterBySearchText = new TextField();
-        filterBySearchText.setPlaceholder("Filter by FN/LS/RN");
+        this.filterByFirstName = new TextField();
+        this.filterByLastName = new TextField();
+        this.filterByRoomNumber = new TextField();
+        filterByFirstName.setPlaceholder("Filter by first name");
+        filterByLastName.setPlaceholder("Filter by last name");
+        filterByRoomNumber.setPlaceholder("Filter by room nr");
+        //this.filterBySearchText = new TextField();
+        //filterBySearchText.setPlaceholder("Filter by FN/LS/RN");
         
 		// Replace listing with filtered content when user changes filter
-//        filterByFirstName.setValueChangeMode(ValueChangeMode.EAGER);
-//        filterByFirstName.addValueChangeListener(e -> listCustomers(e.getValue()));
-//        
-//        filterByLastName.setValueChangeMode(ValueChangeMode.EAGER);
-//        filterByLastName.addValueChangeListener(e -> listCustomers(e.getValue()));
-//        
-//        filterByRoomNumber.setValueChangeMode(ValueChangeMode.EAGER);
-//        filterByRoomNumber.addValueChangeListener(e -> listCustomers(e.getValue()));
+        filterByFirstName.setValueChangeMode(ValueChangeMode.EAGER);
+        filterByFirstName.addValueChangeListener(e -> listCustomersByFirstName(e.getValue()));
         
-        filterBySearchText.setValueChangeMode(ValueChangeMode.EAGER);
-        filterBySearchText.addValueChangeListener(e -> listCustomers(e.getValue()));
+        filterByLastName.setValueChangeMode(ValueChangeMode.EAGER);
+        filterByLastName.addValueChangeListener(e -> listCustomersByLastName(e.getValue()));
+        
+        filterByRoomNumber.setValueChangeMode(ValueChangeMode.EAGER);
+        filterByRoomNumber.addValueChangeListener(e -> listCustomersByRoomNumber(e.getValue()));
+        
+        //filterBySearchText.setValueChangeMode(ValueChangeMode.EAGER);
+        //filterBySearchText.addValueChangeListener(e -> listCustomersByFirstNameOrLastNameOrRoomNumber(e.getValue()));
 
-//        searchBar.addComponents(filterByFirstName, filterByLastName, filterByRoomNumber);
-        searchBar.addComponent(filterBySearchText);
+        searchBar.addComponents(filterByFirstName, filterByLastName, filterByRoomNumber);
+        //searchBar.addComponent(filterBySearchText);
 
-//        searchBar.setComponentAlignment(filterByFirstName, Alignment.MIDDLE_LEFT);
-//        searchBar.setComponentAlignment(filterByLastName, Alignment.MIDDLE_CENTER);
-//        searchBar.setComponentAlignment(filterByRoomNumber, Alignment.MIDDLE_RIGHT);
-        searchBar.setComponentAlignment(filterBySearchText, Alignment.MIDDLE_CENTER);
+        searchBar.setComponentAlignment(filterByFirstName, Alignment.MIDDLE_LEFT);
+        searchBar.setComponentAlignment(filterByLastName, Alignment.MIDDLE_CENTER);
+        searchBar.setComponentAlignment(filterByRoomNumber, Alignment.MIDDLE_RIGHT);
+        //searchBar.setComponentAlignment(filterBySearchText, Alignment.MIDDLE_CENTER);
 
         return searchBar;
     }
 	
-	// tag::listCustomers[]
-	void listCustomers(String filterText) {
-		if (StringUtils.isEmpty(filterText)) {
+	void listCustomersByFirstName(String filterByFirstName) {
+		if (StringUtils.isEmpty(filterByFirstName)) {
 			grid.setItems(service.findAll());
 		}
 		else {
-//			grid.setItems(service.findByFirstNameLike(filterText));
-//			grid.setItems(service.findByLastNameLike(filterText));
-//			grid.setItems(service.findByRoomNumberLike(filterText));
-			grid.setItems(service.findByFirstNameOrLastNameOrRoomNumberLike(filterText));
+			grid.setItems(service.findByFirstNameLike(filterByFirstName));
 		}
 	}
-	// end::listCustomers[]
+	
+	void listCustomersByLastName(String filterByLastName) {
+		if (StringUtils.isEmpty(filterByLastName)) {
+			grid.setItems(service.findAll());
+		}
+		else {
+			grid.setItems(service.findByLastNameLike(filterByLastName));
+		}
+	}
+	
+	void listCustomersByRoomNumber(String filterByRoomNumber) {
+		if (StringUtils.isEmpty(filterByRoomNumber)) {
+			grid.setItems(service.findAll());
+		}
+		else {
+			grid.setItems(service.findByRoomNumberLike(filterByRoomNumber));
+		}
+	}
+	
+//	void listCustomersByFirstNameOrLastNameOrRoomNumber(String filterByFirstNameOrLastNameOrRoomNumber) {
+//		if (StringUtils.isEmpty(filterByFirstNameOrLastNameOrRoomNumber)) {
+//			grid.setItems(service.findAll());
+//		}
+//		else {
+//			grid.setItems(service.findByFirstNameOrLastNameOrRoomNumberLike(filterByFirstNameOrLastNameOrRoomNumber));
+//		}
+//	}
     
     private void editSelectedEntry() {
         if (selectedId != null) {
