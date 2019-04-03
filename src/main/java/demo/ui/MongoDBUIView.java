@@ -24,6 +24,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+
 import org.springframework.util.StringUtils;
 
 import demo.data.Customer;
@@ -186,9 +188,9 @@ public class MongoDBUIView extends VerticalLayout implements View,ReloadEntriesE
         searchBar.addComponents(filterByFirstName, filterByLastName, filterByRoomNumber);
         //searchBar.addComponent(filterBySearchText);
 
-        searchBar.setComponentAlignment(filterByFirstName, Alignment.MIDDLE_LEFT);
+        searchBar.setComponentAlignment(filterByFirstName, Alignment.MIDDLE_CENTER);
         searchBar.setComponentAlignment(filterByLastName, Alignment.MIDDLE_CENTER);
-        searchBar.setComponentAlignment(filterByRoomNumber, Alignment.MIDDLE_RIGHT);
+        searchBar.setComponentAlignment(filterByRoomNumber, Alignment.MIDDLE_CENTER);
         //searchBar.setComponentAlignment(filterBySearchText, Alignment.MIDDLE_CENTER);
 
         return searchBar;

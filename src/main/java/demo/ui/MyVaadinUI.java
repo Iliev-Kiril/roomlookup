@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.ClassResource;
@@ -13,12 +14,14 @@ import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -31,12 +34,14 @@ import demo.ui.event.ReloadEntriesEvent;
 @Title("Roomlookup")
 @SpringUI
 @SpringViewDisplay
+
 public class MyVaadinUI extends UI implements ViewDisplay{
 
 	private Panel springViewDisplay;
 	
-	Image loginLogo;
-	String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+//	Image loginLogo;
+//	String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+	Label labelLogo;
 	
 	@Autowired
 	EventSystem eventSystem;
@@ -58,33 +63,23 @@ public class MyVaadinUI extends UI implements ViewDisplay{
 		root.setSpacing(true);
 		setContent(root);
 		
-		//loginLogo.setSource(new ClassResource(String.format("/images/roomlookup_b.png", 1)));
-		loginLogo = new Image("", new FileResource(new File(basepath +  "/WEB-INF/images/roomlookup_b.png")));
-		loginLogo.setWidth(30, Unit.PERCENTAGE);
-		root.addComponent(loginLogo);
-		root.setComponentAlignment(loginLogo, Alignment.MIDDLE_CENTER);
-
-		final CssLayout navigationBar = new CssLayout();
-		navigationBar.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+//		loginLogo.setSource(new ClassResource(String.format("/images/roomlookup_b.png", 1)));
+//		loginLogo = new Image("", new FileResource(new File(basepath +  "/WEB-INF/images/roomlookup_b.png")));
+//		loginLogo.setWidth(30, Unit.PERCENTAGE);
+//		root.addComponent(loginLogo);
+//		root.setComponentAlignment(loginLogo, Alignment.MIDDLE_CENTER);
 		
-        navigationBar.addComponent(createNavigationButton("Employees",
-                MongoDBUIView.VIEW_NAME));
-        
-		root.addComponent(navigationBar);
+		labelLogo = new Label("RoomLookUp");
+		root.addComponent(labelLogo);
+		root.setComponentAlignment(labelLogo, Alignment.MIDDLE_CENTER);
 
 		springViewDisplay = new Panel();
         springViewDisplay.setSizeFull();
         root.addComponent(springViewDisplay);
         root.setExpandRatio(springViewDisplay, 1.0f);
+        root.getUI().getNavigator().navigateTo(MongoDBUIView.VIEW_NAME);
 
 	}
-
-	private Button createNavigationButton(String caption, final String viewName) {
-        Button button = new Button(caption);
-        button.addStyleName(ValoTheme.BUTTON_SMALL);
-        button.addClickListener(event -> getUI().getNavigator().navigateTo(viewName));
-        return button;
-    }
 	
 	@Override
     public void showView(View view) {

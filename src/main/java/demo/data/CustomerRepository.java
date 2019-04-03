@@ -16,6 +16,9 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
 	@Query("{'$or':[ {roomNumber: { $regex: ?0, $options: 'i'} } ]}")
 	public List<Customer> findByRoomNumberLike(String roomNumber);
 	
+	//@Query("{'firstName': ?#{[0]} }")
+	//List<Customer> findByFirstNameLike(String param0);
+	
 	//@Query("{'$or':[ {firstName: { $regex: ?0, $options: 'i'} } , {lastName: { $regex: ?0, $options: 'i'} } , {roomNumber: { $regex: ?0, $options: 'i'} } ]}")
     //public List<Customer> findByFirstNameOrLastNameOrRoomNumberLike(String searchText);
 
